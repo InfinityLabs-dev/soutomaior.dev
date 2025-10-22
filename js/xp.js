@@ -1,49 +1,47 @@
-const XP_TOTAL = 100; // total XP to reach 100%
-let xp = parseInt(localStorage.getItem("xp")) || 0;
+document.addEventListener("DOMContentLoaded", () => {
+  const XP_TOTAL = 100;
+  let xp = parseInt(localStorage.getItem("xp")) || 0;
+  const completed = JSON.parse(localStorage.getItem("completed")) || {};
 
-const xpValue = document.getElementById("xp-value");
-const xpTotal = document.getElementById("xp-total");
-const xpFill = document.getElementById("xp-fill");
+  const xpValue = document.getElementById("xp-value");
+  const xpTotal = document.getElementById("xp-total");
+  const xpFill = document.getElementById("xp-fill");
+  xpTotal.textContent = XP_TOTAL;
 
-xpTotal.textContent = XP_TOTAL;
-updateXPDisplay();
+  function updateXPDisplay() {
+    xpValue.textContent = xp;
+    xpFill.style.width = `${(xp / XP_TOTAL) * 100}%`;
+  }
 
-function addXP(amount) {
-  if (xp + amount > XP_TOTAL) xp = XP_TOTAL;
-  else xp += amount;
-  localStorage.setItem("xp", xp);
+  function addXP(amount) {
+    xp = Math.min(XP_TOTAL, xp + amount);
+    localStorage.setItem("xp", xp);
+    updateXPDisplay();
+  }
+
+  function gainXP(id, amount) {
+    if (completed[id]) return; // prevent double XP
+    completed[id] = true;
+    localStorage.setItem("completed", JSON.stringify(completed));
+    addXP(amount);
+    showXPToast(`+${amount} XP`);
+  }
+
+  // Small popup animation when gaining XP
+  function showXPToast(text) {
+    const toast = document.createElement("div");
+    toast.className = "xp-toast";
+    toast.textContent = text;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 1200);
+  }
+
+  // Initialize XP display
   updateXPDisplay();
-}
 
-function updateXPDisplay() {
-  xpValue.textContent = xp;
-  xpFill.style.width = `${(xp / XP_TOTAL) * 100}%`;
-}
-
-// Example triggers:
-// Replace these with your real event listeners
-document.querySelectorAll(".folder").forEach(folder => {
-  folder.addEventListener("click", () => addXP(10));
-});
-
-document.querySelectorAll(".project").forEach(project => {
-  project.addEventListener("click", () => addXP(20));
-});
-
-
-const completed = JSON.parse(localStorage.getItem("completed")) || {};
-
-function gainXP(id, amount) {
-  if (completed[id]) return; // already viewed
-  completed[id] = true;
-  addXP(amount);
-  localStorage.setItem("completed", JSON.stringify(completed));
-}
-
-document.querySelectorAll(".folder").forEach(folder => {
-  folder.addEventListener("click", () => gainXP(folder.dataset.id, 10));
-});
-
-document.querySelectorAll(".project").forEach(project => {
-  project.addEventListener("click", () => gainXP(project.dataset.id, 20));
+  // Add XP when folders are opened
+  document.querySelectorAll(".folder").forEach(folder => {
+    const id = folder.querySelector(".folder-name").textContent.toLowerCase();
+    folder.addEventListener("click", () => gainXP(id, 15));
+  });
 });
