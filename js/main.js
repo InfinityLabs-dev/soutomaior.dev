@@ -1,16 +1,24 @@
     const folderContents = {
+        
+        github: `
+            <h2>GitHub Repositories</h2>
+            <div id="github-repos-container">
+                <p>Loading repositories...</p>
+            </div>
+        `,
+
         about: `
             <h2>Resume</h2>
-                <iframe
-                    src="images/Resume.pdf" 
-                    width="100%" 
-                    height="900px" 
+                <img src="images/spiderman.jpg" 
+                    width="350px" 
+                    height="350px" 
                     style="border: none; border-radius: 10px;">
                 </iframe>
-                <p>Hello! I'm a passionate web developer and software engineer specializing in cutting-edge technologies...</p>
+                <p></p>
                 `,
         projects: '',
 
+        ContentClimb: '',
 
 
         skills: `
@@ -92,31 +100,48 @@ and team communication  </li>
 
     let currentFolder = 'home';
 
-    function openFolder(folderName) {
-        currentFolder = folderName;
-        const contentArea = document.getElementById('content-area');
-        const currentFolderSpan = document.getElementById('current-folder');
-        const separator = document.getElementById('separator');
+function openFolder(folderName, parentFolder = null) {
+    currentFolder = folderName;
+    const contentArea = document.getElementById('content-area');
+    const currentFolderSpan = document.getElementById('current-folder');
+    const separator = document.getElementById('separator');
 
-        currentFolderSpan.textContent = folderName.charAt(0).toUpperCase() + folderName.slice(1);
-        currentFolderSpan.style.display = 'inline';
-        separator.style.display = 'inline';
-
-        // Build the shell first (without inserting large HTML)
-        contentArea.innerHTML = `
-            <button class="back-button" onclick="navigateTo('home')">
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
-                </svg>
-                Back
-            </button>
-            <div class="folder-content"></div>
+    // Build breadcrumb with clickable parts
+    if (parentFolder) {
+        currentFolderSpan.innerHTML = `
+            <span class="breadcrumb-item" onclick="navigateTo('home'); openFolder('${parentFolder}')">
+                ${parentFolder.charAt(0).toUpperCase() + parentFolder.slice(1)}
+            </span>
+            <span class="breadcrumb-separator">/</span>
+            <span style="color: #2d3748;">
+                ${folderName.charAt(0).toUpperCase() + folderName.slice(1)}
+            </span>
         `;
-
-        // Then safely append the large content
-        const folderContentDiv = contentArea.querySelector('.folder-content');
-        folderContentDiv.innerHTML = folderContents[folderName];
+    } else {
+        currentFolderSpan.textContent = folderName.charAt(0).toUpperCase() + folderName.slice(1);
     }
+    
+    currentFolderSpan.style.display = 'inline';
+    separator.style.display = 'inline';
+
+    // Rest of the function stays the same...
+    contentArea.innerHTML = `
+        <button class="back-button" onclick="${parentFolder && parentFolder !== 'home' ? `openFolder('${parentFolder}')` : `navigateTo('home')`}">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+            </svg>
+            Back
+        </button>
+        <div class="folder-content"></div>
+    `;
+
+    const folderContentDiv = contentArea.querySelector('.folder-content');
+    folderContentDiv.innerHTML = folderContents[folderName];
+
+    if (folderName === 'github') {
+        loadGitHubRepos();
+    }
+}
 
 
     function navigateTo(location) {
@@ -138,7 +163,7 @@ and team communication  </li>
                         <div class="folder-name">Resume</div>
                     </div>
                     <div class="folder" onclick="openFolder('projects')">
-                        <svg class="folder-icon" viewBox="0 0 24 24" fill="none" stroke="#764ba2" stroke-width="2">
+                        <svg class="folder-icon" viewBox="0 0 24 24" fill="none" stroke="#ffd700" stroke-width="2">
                             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                         </svg>
                         <div class="folder-name">Projects</div>
@@ -155,7 +180,7 @@ and team communication  </li>
                         </svg>
                         <div class="folder-name">Experience</div>
                     </div>
-                    <div class="folder" onclick="window.open('https://github.com/InfinityLabs-dev', '_blank')">
+                    <div class="folder" onclick="openFolder('github')">
                         <svg class="folder-icon" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2">
                             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                         </svg>
@@ -179,3 +204,43 @@ and team communication  </li>
             ? 'LOL'
             : 'DO NOT PUSH';
     }
+
+
+/* LOAD ALL PUBLIC GITHUB REPOS */
+    async function loadGitHubRepos() {
+    const username = 'InfinityLabs-dev';
+    const container = document.getElementById('github-repos-container');
+    
+    try {
+        const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+        const repos = await response.json();
+        
+        if (repos.message) {
+            container.innerHTML = '<p>Error loading repositories. Please try again later.</p>';
+            return;
+        }
+        
+        // Filter out forks if you want only original repos
+        const publicRepos = repos.filter(repo => !repo.fork);
+        
+        container.innerHTML = publicRepos.map(repo => `
+            <a href="${repo.html_url}" target="_blank" class="project-card">
+                <h3>${repo.name}</h3>
+                <p>${repo.description || 'No description available'}</p>
+                <div class="project-tags">
+                    ${repo.language ? `<span class="tag">${repo.language}</span>` : ''}
+                    <span class="tag">⭐ ${repo.stargazers_count}</span>
+                    <span class="tag">🍴 ${repo.forks_count}</span>
+                </div>
+                <p style="font-size: 0.85rem; color: #718096; margin-top: 0.5rem;">
+                    Updated: ${new Date(repo.updated_at).toLocaleDateString()}
+                </p>
+            </a>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Error fetching GitHub repos:', error);
+        container.innerHTML = '<p>Error loading repositories. Please try again later.</p>';
+    }
+}
+

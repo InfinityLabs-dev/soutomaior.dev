@@ -135,7 +135,7 @@ body.flipped {
 }
 
 .breadcrumb-item {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     color: #4a5568;
@@ -237,6 +237,10 @@ body.flipped {
     margin-bottom: 1rem;
 }
 
+.folders-grid, .project-card {
+    pointer-events: auto;
+}
+
 .project-card {
     display: block;
     text-decoration: none;
@@ -245,6 +249,13 @@ body.flipped {
     padding: 20px;
     color: inherit;
     transition: transform 0.2s, box-shadow 0.2s;
+    isolation: isolate; /* Add this instead of z-index */
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(30, 22, 22, 0.1);
+    z-index: 2; /* Add this */
 }
 
 .project-avatar {
@@ -255,11 +266,6 @@ body.flipped {
     border: 2px solid #e2e8f0; /* subtle border */
     margin-bottom: 10px;      /* spacing before title */
     display: block;
-}
-
-.project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(30, 22, 22, 0.1);
 }
 
 .project-card h3 {
