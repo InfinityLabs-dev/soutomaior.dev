@@ -1,3 +1,9 @@
+html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -23,36 +29,34 @@ body.flipped {
 }
 
 /* XP SECTION */
-/* XP Game Bar */
 #xp-container {
-  position: fixed;
-  bottom: 15px;
-  left: 15px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  padding: 10px 15px;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  width: 200px;
-  z-index: 999;
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    width: 200px;
+    z-index: 999;
 }
 
 #xp-bar {
-  background: #e2e8f0;
-  height: 8px;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-top: 5px;
+    background: #e2e8f0;
+    height: 8px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
 }
 
 #xp-fill {
-  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
-  height: 100%;
-  width: 0%;
-  transition: width 0.3s ease;
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
 }
-
 
 /* Header Section */
 .header {
@@ -76,14 +80,14 @@ body.flipped {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    overflow: hidden; /* 🔥 ensures image stays inside the circle */
+    overflow: hidden;
 }
 
 .profile-pic img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 🔥 fills the circle without distortion */
-    border-radius: 50%; /* optional, helps anti-alias edges */
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .header-info {
@@ -120,6 +124,17 @@ body.flipped {
 .contact-item svg {
     width: 18px;
     height: 18px;
+}
+
+.contact-item span,
+.contact-text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.contact-item a {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Navigation Breadcrumb */
@@ -216,11 +231,11 @@ body.flipped {
 
 /* Folder Content */
 .folder-content {
-  animation: none !important;
-  overflow: visible !important;
-  max-height: none !important;
-  height: auto !important;
-  position: relative !important;
+    animation: none !important;
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    position: relative !important;
 }
 
 .folder-content h2 {
@@ -249,22 +264,22 @@ body.flipped {
     padding: 20px;
     color: inherit;
     transition: transform 0.2s, box-shadow 0.2s;
-    isolation: isolate; /* Add this instead of z-index */
+    isolation: isolate;
 }
 
 .project-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 15px rgba(30, 22, 22, 0.1);
-    z-index: 2; /* Add this */
+    z-index: 2;
 }
 
 .project-avatar {
-    width: 60px;              /* adjust size as desired */
+    width: 60px;
     height: 60px;
-    border-radius: 50%;       /* make it circular */
-    object-fit: cover;        /* ensures image fills circle properly */
-    border: 2px solid #e2e8f0; /* subtle border */
-    margin-bottom: 10px;      /* spacing before title */
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e2e8f0;
+    margin-bottom: 10px;
     display: block;
 }
 
@@ -337,20 +352,325 @@ body.inverted {
 }
 
 .xp-toast {
-  position: fixed;
-  bottom: 80px;
-  left: 30px;
-  background: #38bdf8;
-  color: white;
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 14px;
-  animation: xpPop 1.2s ease forwards;
+    position: fixed;
+    bottom: 80px;
+    left: 30px;
+    background: #38bdf8;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    animation: xpPop 1.2s ease forwards;
 }
 
 @keyframes xpPop {
-  0% { opacity: 0; transform: translateY(10px); }
-  20% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-20px); }
+    0% { opacity: 0; transform: translateY(10px); }
+    20% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
+/* ========== MOBILE STYLES ========== */
+@media screen and (max-width: 768px) {
+    /* Force everything to stay within viewport */
+    body {
+        overflow-x: hidden;
+        width: 100vw;
+    }
+
+    /* Container padding */
+    .container {
+        padding: 1rem;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Header Section - Stack vertically on mobile */
+    .header {
+        flex-direction: column;
+        padding: 1rem;
+        text-align: center;
+        gap: 0.75rem;
+        overflow: hidden;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .profile-pic {
+        width: 70px;
+        height: 70px;
+    }
+
+    .header-info {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .header-info h1 {
+        font-size: 1.25rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        line-height: 1.2;
+        margin-bottom: 0.25rem;
+    }
+
+    .header-info .title {
+        font-size: 0.75rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.3;
+        padding: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Contact info - stack vertically with abbreviated labels */
+    .contact-info {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .contact-item {
+        font-size: 0.7rem;
+        justify-content: flex-start;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 0.25rem;
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+
+    .contact-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    /* Hide full text, show only icons and short labels on mobile */
+    .contact-item span,
+    .contact-item .contact-text {
+        display: none;
+    }
+
+    /* Show abbreviated versions for mobile */
+    .contact-item:nth-child(1)::after {
+        content: "Email";
+        font-size: 0.75rem;
+        color: #4a5568;
+    }
+
+    .contact-item:nth-child(2)::after {
+        content: "LinkedIn";
+        font-size: 0.75rem;
+        color: #4a5568;
+    }
+
+    .contact-item:nth-child(3)::after {
+        content: "GitHub";
+        font-size: 0.75rem;
+        color: #4a5568;
+    }
+
+    .contact-item:nth-child(4)::after {
+        content: "San Diego, CA";
+        font-size: 0.75rem;
+        color: #4a5568;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+        max-width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* Content Area */
+    .content-area {
+        padding: 1rem;
+        max-width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    /* Folders Grid - 2 columns on mobile */
+    .folders-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .folder {
+        padding: 1rem;
+    }
+
+    .folder-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .folder-name {
+        font-size: 0.85rem;
+    }
+
+    /* Folder Content */
+    .folder-content {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .folder-content h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        word-wrap: break-word;
+    }
+
+    .folder-content p {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Images in content - make them responsive */
+    .folder-content img {
+        max-width: 100% !important;
+        height: auto !important;
+        width: 100% !important;
+        border-radius: 10px;
+    }
+
+    /* Project Cards */
+    .project-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        max-width: 100%;
+        overflow: hidden;
+        word-wrap: break-word;
+    }
+
+    .project-card h3 {
+        font-size: 1rem;
+        word-wrap: break-word;
+    }
+
+    .project-card p {
+        font-size: 0.85rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Project Tags */
+    .project-tags {
+        gap: 0.3rem;
+        flex-wrap: wrap;
+    }
+
+    .tag {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    /* Back Button */
+    .back-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* XP Container */
+    #xp-container {
+        bottom: 10px;
+        left: 10px;
+        width: 140px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    #xp-label {
+        font-size: 11px;
+    }
+
+    /* Secret Button - make it smaller */
+    .secret-button {
+        padding: 3px 8px;
+        font-size: 7px;
+        bottom: 10px;
+        right: 10px;
+    }
+}
+
+/* Very small screens (phones in portrait) */
+@media screen and (max-width: 480px) {
+    .container {
+        padding: 0.5rem;
+    }
+
+    .header {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .profile-pic {
+        width: 60px;
+        height: 60px;
+    }
+
+    .header-info h1 {
+        font-size: 1.1rem;
+        line-height: 1.1;
+    }
+
+    .header-info .title {
+        font-size: 0.7rem;
+        line-height: 1.2;
+    }
+
+    .contact-item {
+        font-size: 0.65rem;
+    }
+
+    .contact-item svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .contact-item::after {
+        font-size: 0.7rem !important;
+    }
+
+    /* Single column folders on very small screens */
+    .folders-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .folder-content h2 {
+        font-size: 1.1rem;
+    }
+
+    /* Make lists in experience section more readable */
+    .project-card ul {
+        padding-left: 1rem;
+    }
+
+    .project-card li {
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+        word-wrap: break-word;
+    }
+}
+
+/* Landscape phones */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .folders-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .header-info .title {
+        font-size: 0.8rem;
+    }
 }

@@ -8,14 +8,11 @@
         `,
 
         about: `
-            <h2>Resume</h2>
-                <img src="images/spiderman.jpg" 
-                    width="350px" 
-                    height="350px" 
-                    style="border: none; border-radius: 10px;">
-                </iframe>
-                <p></p>
-                `,
+        <h2>Resume</h2>
+            <img src="images/spiderman.jpg" 
+                style="max-width: 100%; height: auto; border: none; border-radius: 10px; display: block; margin: 0 auto;">
+        <p></p>`,
+        
         projects: '',
 
         ContentClimb: '',
